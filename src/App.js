@@ -1,8 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   LineChart, Line, XAxis, YAxis, Tooltip,
-  BarChart, Bar, RadarChart, Radar, PolarGrid,
-  PolarAngleAxis, ResponsiveContainer, ReferenceLine, Legend,
+  BarChart, Bar, ResponsiveContainer, ReferenceLine, Legend,
 } from "recharts";
 
 // ── Colors ──────────────────────────────────────────────
@@ -255,12 +254,6 @@ const DetailView = ({stock, allStocks, history}) => {
       [`Avg ${stock.sector}`]: avg != null ? parseFloat(avg.toFixed(2)) : null,
     };
   });
-
-  // Score breakdown
-  const scoreData = SCORE_CRITERIA.map(c => ({
-    name: c.label,
-    met: c.check(stock[c.k]) ? 1 : 0,
-  }));
 
   return (
     <div>
@@ -515,9 +508,9 @@ const SectorView = ({stocks}) => {
                   <td style={{padding:"9px 12px",textAlign:"right",color:C.sub}}>{row.count}</td>
                   {kpis.map(({label}) => {
                     const v = row[label];
-                    const isGood = label==="ROE%"&&v>15||label==="Gross%"&&v>40||
-                                   label==="EPS Yr%"&&v>20||label==="EPS Nx%"&&v>15;
-                    const isBad  = (label==="ROE%"||label==="Net%")&&v<0||label==="D/Eq"&&v>2;
+                    const isGood = (label==="ROE%"&&v>15) || (label==="Gross%"&&v>40) ||
+                                   (label==="EPS Yr%"&&v>20) || (label==="EPS Nx%"&&v>15);
+                    const isBad  = ((label==="ROE%"||label==="Net%")&&v<0) || (label==="D/Eq"&&v>2);
                     return (
                       <td key={label} style={{padding:"9px 12px",textAlign:"right",fontFamily:"monospace",
                         color:isGood?C.green:isBad?C.red:C.text}}>
